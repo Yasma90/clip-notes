@@ -78,3 +78,24 @@ export async function createTopic(name: string): Promise<Topic & { noteCount: nu
   await writeTopics(topics)
   return { ...newTopic, noteCount: 0 }
 }
+
+/**
+ * Ensures a topic exists in topics.json. Creates it if missing.
+ * Used to auto-register topics when saving notes.
+ * Accepts either a topic id (slug) or a display name.
+ */
+export async function ensureTopicExists(nameOrId: string): Promise<void> {
+  if (!nameOrId) return
+  const topics = await readTopics()
+  const id = slugify(nameOrId)
+
+  if (topics.find((t) => t.id === id)) return
+
+  // Use the original name if it differs from the slug; otherwise capitalize
+  const displayName = nameOrId === id
+    ? nameOrId.charAt(0).toUpperCase() + nameOrId.slice(1)
+    : nameOrId
+
+  topics.push({ id, name: displayName })
+  await writeTopics(topics)
+}

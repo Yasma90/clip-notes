@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
   FolderOpen,
   Calendar,
@@ -12,10 +12,13 @@ import type { Topic, DateGroup } from '../types'
 
 interface Props {
   topics: Topic[]
+  dateGroups: DateGroup[]
   selectedTopic: string | null
   selectedYearMonth: string | null
+  selectedDate: string | null
   onSelectTopic: (topic: string | null) => void
   onSelectYearMonth: (ym: string | null) => void
+  onSelectDate: (date: string | null) => void
   onCreateTopic: (name: string) => void
   onNewNote: () => void
   searchQuery: string
@@ -29,28 +32,35 @@ const MONTH_NAMES = [
 
 export default function Sidebar({
   topics,
+  dateGroups,
   selectedTopic,
   selectedYearMonth,
+  selectedDate,
   onSelectTopic,
   onSelectYearMonth,
+  onSelectDate,
   onCreateTopic,
   onNewNote,
   searchQuery,
   onSearchChange
 }: Props) {
-  const [dateGroups, setDateGroups] = useState<DateGroup[]>([])
   const [expandedYears, setExpandedYears] = useState<Set<number>>(new Set())
+  const [expandedMonths, setExpandedMonths] = useState<Set<string>>(new Set())
   const [showNewTopic, setShowNewTopic] = useState(false)
   const [newTopicName, setNewTopicName] = useState('')
-
-  useEffect(() => {
-    window.api.getDateGroups().then(setDateGroups)
-  }, [topics])
 
   const toggleYear = (year: number) => {
     setExpandedYears((prev) => {
       const next = new Set(prev)
       next.has(year) ? next.delete(year) : next.add(year)
+      return next
+    })
+  }
+
+  const toggleMonth = (ym: string) => {
+    setExpandedMonths((prev) => {
+      const next = new Set(prev)
+      next.has(ym) ? next.delete(ym) : next.add(ym)
       return next
     })
   }
@@ -175,21 +185,66 @@ export default function Sidebar({
               {expandedYears.has(group.year) &&
                 group.months.map((m) => {
                   const ym = `${group.year}-${String(m.month).padStart(2, '0')}`
+                  const hasDays = m.days && m.days.length > 0
                   return (
-                    <button
-                      key={ym}
-                      onClick={() =>
-                        onSelectYearMonth(selectedYearMonth === ym ? null : ym)
-                      }
-                      className={`w-full flex items-center justify-between pl-7 pr-2 py-1 text-xs rounded-md transition-colors ${
-                        selectedYearMonth === ym
-                          ? 'bg-accent/20 text-accent'
-                          : 'text-text-muted hover:bg-sidebar-hover hover:text-text'
-                      }`}
-                    >
-                      <span>{MONTH_NAMES[m.month]}</span>
-                      <span className="text-[10px]">{m.count}</span>
-                    </button>
+                    <div key={ym}>
+                      <div
+                        className={`flex items-center rounded-md transition-colors ${
+                          selectedYearMonth === ym
+                            ? 'bg-accent/20 text-accent'
+                            : 'hover:bg-sidebar-hover'
+                        }`}
+                      >
+                        <button
+                          onClick={() => hasDays && toggleMonth(ym)}
+                          className="pl-5 pr-1 py-1 text-text-muted hover:text-text"
+                        >
+                          {hasDays ? (
+                            expandedMonths.has(ym) ? (
+                              <ChevronDown size={10} />
+                            ) : (
+                              <ChevronRight size={10} />
+                            )
+                          ) : (
+                            <span className="inline-block w-[10px]" />
+                          )}
+                        </button>
+                        <button
+                          onClick={() =>
+                            onSelectYearMonth(selectedYearMonth === ym ? null : ym)
+                          }
+                          className={`flex-1 flex items-center justify-between pr-2 py-1 text-xs transition-colors ${
+                            selectedYearMonth === ym
+                              ? 'text-accent'
+                              : 'text-text-muted hover:text-text'
+                          }`}
+                        >
+                          <span>{MONTH_NAMES[m.month]}</span>
+                          <span className="text-[10px]">{m.count}</span>
+                        </button>
+                      </div>
+
+                      {expandedMonths.has(ym) &&
+                        m.days.map((d) => {
+                          const dateStr = `${ym}-${String(d.day).padStart(2, '0')}`
+                          return (
+                            <button
+                              key={dateStr}
+                              onClick={() =>
+                                onSelectDate(selectedDate === dateStr ? null : dateStr)
+                              }
+                              className={`w-full flex items-center justify-between pl-11 pr-2 py-1 text-xs rounded-md transition-colors ${
+                                selectedDate === dateStr
+                                  ? 'bg-accent/20 text-accent'
+                                  : 'text-text-muted hover:bg-sidebar-hover hover:text-text'
+                              }`}
+                            >
+                              <span>Día {d.day}</span>
+                              <span className="text-[10px]">{d.count}</span>
+                            </button>
+                          )
+                        })}
+                    </div>
                   )
                 })}
             </div>

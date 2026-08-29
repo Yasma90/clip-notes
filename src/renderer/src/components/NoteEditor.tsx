@@ -79,9 +79,13 @@ export default function NoteEditor({ topics, editingNote, onSave, onCreateTopic,
 
   const handleSynthesize = () => {
     if (!body.trim()) return
-    const bullets = synthesize(body)
     const separator = '\n\n---\n\n## Puntos Clave\n\n'
-    const newBody = body + separator + bullets
+    // If a previous synthesis section exists, strip it so we synthesize from
+    // the original content only and replace (not concatenate) the bullets.
+    const existingIdx = body.indexOf(separator.trim())
+    const baseContent = existingIdx >= 0 ? body.slice(0, existingIdx).trimEnd() : body
+    const bullets = synthesize(baseContent)
+    const newBody = baseContent + separator + bullets
     setBody(newBody)
     onBodyChange?.(newBody)
   }
