@@ -1,15 +1,11 @@
 import type { Topic } from '../types'
 
 const STOPWORDS = new Set([
-  'el', 'la', 'los', 'las', 'un', 'una', 'de', 'del', 'en', 'con', 'por',
-  'para', 'es', 'son', 'fue', 'ser', 'que', 'se', 'su', 'al', 'lo', 'como',
-  'más', 'pero', 'sus', 'le', 'ya', 'o', 'este', 'si', 'porque', 'esta',
-  'entre', 'cuando', 'muy', 'sin', 'sobre', 'también', 'me', 'hasta', 'hay',
   'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for',
   'of', 'with', 'by', 'is', 'are', 'was', 'were', 'be', 'been', 'being',
   'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could',
   'should', 'may', 'might', 'shall', 'can', 'it', 'its', 'this', 'that',
-  'these', 'those', 'not', 'todo', 'cada', 'otro', 'otra', 'todos', 'todas'
+  'these', 'those', 'not', 'all', 'each', 'other', 'another', 'every'
 ])
 
 function tokenize(text: string): string[] {

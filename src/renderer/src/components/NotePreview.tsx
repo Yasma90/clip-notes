@@ -22,7 +22,7 @@ export default function NotePreview({ content, width }: Props) {
           </div>
         ) : (
           <p className="text-sm text-text-muted/50 italic">
-            El preview aparecerá aquí...
+            Preview will appear here...
           </p>
         )}
       </div>

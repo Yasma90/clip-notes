@@ -1,19 +1,19 @@
 # clip-notes
 
-App desktop para capturar, formatear y organizar notas en Markdown.
+Desktop app for capturing, formatting, and organizing notes in Markdown.
 
-Peg&aacute; texto desde cualquier sitio (web, email, Word) y se auto-convierte a Markdown. Sintetiz&aacute; el contenido en puntos clave con un click. Todo se guarda como archivos `.md` organizados autom&aacute;ticamente por fecha y tema.
+Paste text from anywhere (web, email, Word) and it auto-converts to Markdown. Synthesize the content into key points with one click. Everything is saved as `.md` files automatically organized by date and topic.
 
 ## Stack
 
 - **Electron 32** + **React 19** + **Vite 6** + **TypeScript**
-- **Tailwind CSS v4** (tema oscuro estilo Catppuccin)
+- **Tailwind CSS v4** (Catppuccin-style dark theme)
 - **Turndown** (HTML &rarr; Markdown)
 - **gray-matter** (YAML frontmatter)
 - **react-markdown** + **remark-gfm** (preview)
-- **electron-builder** (empaquetado Windows)
+- **electron-builder** (Windows packaging)
 
-## Ejecutar en desarrollo
+## Run in development
 
 ```bash
 cd c:\Users\Datamart\source\repos\clip-notes
@@ -21,85 +21,85 @@ npm install
 npm run dev
 ```
 
-## Generar binario Windows
+## Generate Windows binary
 
 ```bash
 npm run build
 # Portable (dist/win-unpacked/clip-notes.exe)
 npx electron-builder --win dir
-# Instalador NSIS (requiere terminal como Administrador)
+# NSIS Installer (requires terminal as Administrator)
 npx electron-builder --win
 ```
 
-> **Nota**: El instalador NSIS necesita privilegio `SeCreateSymbolicLinkPrivilege` (crear symlinks). Ejecut&aacute; la terminal como administrador o habilit&aacute; el modo desarrollador de Windows.
+> **Note**: The NSIS installer needs `SeCreateSymbolicLinkPrivilege` (create symlinks). Run the terminal as administrator or enable Windows developer mode.
 
 ## Features
 
-- **Pegar y formatear**: Peg&aacute; HTML desde cualquier fuente &rarr; se convierte a Markdown
-- **Sintetizar**: Extrae puntos clave en bullets (algoritmo local, sin API externa). Re-sintetizar **reemplaza** la secci&oacute;n anterior.
-- **Guardado inteligente**: `Documentos/clip-notes/notes/YYYY-MM/tema/YYYY-MM-DD_HHmmss.md` con YAML frontmatter (title, date, tags, topic)
-- **Auto-detecci&oacute;n de tema**: Al pegar contenido, sugiere un tema basado en el texto. Topics nuevos se registran autom&aacute;ticamente.
-- **Navegaci&oacute;n**:
-  - Por temas (con conteo de notas)
-  - Por fecha jer&aacute;rquica: a&ntilde;o &gt; mes &gt; d&iacute;a
-- **Preview en vivo** redimensionable (arrastrar divisor, doble click para resetear)
-- **Tags** por nota
-- **B&uacute;squeda** por t&iacute;tulo, contenido o tags
-- **Filtros locales** (fecha/tema usan tiempo local, no UTC)
+- **Paste & Format**: Paste HTML from any source &rarr; converts to Markdown
+- **Synthesize**: Extracts key points into bullets (local algorithm, no external API). Re-synthesizing **replaces** the previous section.
+- **Smart Save**: `Documents/clip-notes/notes/YYYY-MM/topic/YYYY-MM-DD_HHmmss.md` with YAML frontmatter (title, date, tags, topic)
+- **Auto-topic detection**: Suggests a topic based on text when pasting. New topics are automatically registered.
+- **Navigation**:
+  - By topics (with note count)
+  - By hierarchical date: year > month > day
+- **Live Preview** resizable (drag divider, double click to reset)
+- **Tags** per note
+- **Search** by title, content, or tags
+- **Local Filters** (date/topic use local time, not UTC)
 
 ## Shortcuts
 
-| Acci&oacute;n              | Tecla           |
+| Action                     | Shortcut        |
 |----------------------------|-----------------|
-| Nueva nota                 | `Ctrl+N`        |
-| Guardar                    | `Ctrl+S`        |
-| Sintetizar puntos clave    | `Ctrl+Shift+S`  |
+| New note                   | `Ctrl+N`        |
+| Save                       | `Ctrl+S`        |
+| Synthesize key points      | `Ctrl+Shift+S`  |
 | Toggle preview             | `Ctrl+Shift+P`  |
 
-## Estructura
+## Structure
 
 ```
 src/
-  main/                    Proceso principal Electron
-    index.ts               Ventana, lifecycle
+  main/                    Electron main process
+    index.ts               Window, lifecycle
     ipc-handlers.ts        IPC main<->renderer
     services/
-      note-service.ts      CRUD notas, frontmatter, paths
-      topic-service.ts     Gesti&oacute;n de topics.json
+      note-service.ts      Notes CRUD, frontmatter, paths
+      topic-service.ts     topics.json management
   preload/
-    index.ts               Bridge tipado (contextBridge)
+    index.ts               Typed bridge (contextBridge)
   renderer/src/
-    App.tsx                Layout 3 paneles + estado global
+    App.tsx                3-panel layout + global state
     components/            Sidebar, NoteEditor, NotePreview,
                           NoteList, TopicPicker, EditorToolbar,
                           ResizeDivider
     hooks/                 useNotes, useTopics, useDateGroups
     lib/                   clipboard-processor, synthesizer,
                           topic-detector
-    types/                 Tipos compartidos
+    types/                 Shared types
 ```
 
-## Almacenamiento
+## Storage
 
-Todo en `Documentos/clip-notes/`:
-- `notes/YYYY-MM/topic-slug/YYYY-MM-DD_HHmmss.md` &mdash; notas
-- `topics.json` &mdash; temas con display name
+Everything in `Documents/clip-notes/`:
+- `notes/YYYY-MM/topic-slug/YYYY-MM-DD_HHmmss.md` &mdash; notes
+- `topics.json` &mdash; topics with display name
 
-Cada nota empieza con frontmatter:
+Each note starts with frontmatter:
 ```yaml
 ---
-title: "T&iacute;tulo de la nota"
+title: "Note title"
 date: "2026-04-15T11:30:22.000Z"
 tags: ["tag1", "tag2"]
-topic: "slug-del-tema"
+topic: "topic-slug"
 ---
 ```
 
 ## Git workflow
 
-- `main` &mdash; producci&oacute;n
-- `develop` &mdash; desarrollo
-- `feature/*` &mdash; features nuevas
-- `hotfix/*` &mdash; bugs de producci&oacute;n
+- `main` &mdash; production
+- `develop` &mdash; development
+- `feature/*` &mdash; new features
+- `hotfix/*` &mdash; production bugs
 
-Nunca commit directo a `main` o `develop`.
+Never commit directly to `main` or `develop`.

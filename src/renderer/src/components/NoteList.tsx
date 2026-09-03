@@ -1,5 +1,5 @@
 import { format, parseISO } from 'date-fns'
-import { es } from 'date-fns/locale'
+import { enUS } from 'date-fns/locale'
 import { FileText, Trash2, FolderOpen } from 'lucide-react'
 import type { NoteMeta } from '../types'
 
@@ -21,7 +21,7 @@ export default function NoteList({
   if (loading) {
     return (
       <div className="flex-1 flex items-center justify-center">
-        <p className="text-sm text-text-muted">Cargando notas...</p>
+        <p className="text-sm text-text-muted">Loading notes...</p>
       </div>
     )
   }
@@ -30,9 +30,9 @@ export default function NoteList({
     return (
       <div className="flex-1 flex flex-col items-center justify-center gap-3 p-8">
         <FileText size={40} className="text-text-muted/30" />
-        <p className="text-sm text-text-muted">No hay notas</p>
+        <p className="text-sm text-text-muted">No notes</p>
         <p className="text-xs text-text-muted/60 text-center">
-          Crea una nueva nota con el botón + o presiona Ctrl+N
+          Create a new note with the + button or press Ctrl+N
         </p>
       </div>
     )
@@ -44,7 +44,7 @@ export default function NoteList({
         {notes.map((note) => {
           let dateStr = ''
           try {
-            dateStr = format(parseISO(note.date), "d MMM yyyy, HH:mm", { locale: es })
+            dateStr = format(parseISO(note.date), "MMM d yyyy, HH:mm", { locale: enUS })
           } catch {
             dateStr = note.date
           }
@@ -92,7 +92,7 @@ export default function NoteList({
                       onOpenInExplorer(note.filePath)
                     }}
                     className="p-1 rounded hover:bg-sidebar-hover text-text-muted hover:text-accent transition-colors"
-                    title="Abrir en explorador"
+                    title="Open in explorer"
                   >
                     <FolderOpen size={12} />
                   </button>
@@ -102,7 +102,7 @@ export default function NoteList({
                       onDelete(note.filePath)
                     }}
                     className="p-1 rounded hover:bg-sidebar-hover text-text-muted hover:text-danger transition-colors"
-                    title="Eliminar"
+                    title="Delete"
                   >
                     <Trash2 size={12} />
                   </button>

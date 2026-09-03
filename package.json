@@ -2,6 +2,8 @@
   "name": "clip-notes",
   "version": "1.0.0",
   "description": "Desktop app for capturing, formatting and organizing notes in markdown",
+  "author": "Yasma90",
+  "license": "MIT",
   "main": "./out/main/index.js",
   "scripts": {
     "dev": "electron-vite dev",
