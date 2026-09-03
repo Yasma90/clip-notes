@@ -1,5 +1,7 @@
 # clip-notes
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Desktop app for capturing, formatting, and organizing notes in Markdown.
 
 Paste text from anywhere (web, email, Word) and it auto-converts to Markdown. Synthesize the content into key points with one click. Everything is saved as `.md` files automatically organized by date and topic.
@@ -16,7 +18,8 @@ Paste text from anywhere (web, email, Word) and it auto-converts to Markdown. Sy
 ## Run in development
 
 ```bash
-cd c:\Users\Datamart\source\repos\clip-notes
+git clone https://github.com/Yasma90/clip-notes.git
+cd clip-notes
 npm install
 npm run dev
 ```
@@ -103,3 +106,7 @@ topic: "topic-slug"
 - `hotfix/*` &mdash; production bugs
 
 Never commit directly to `main` or `develop`.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
