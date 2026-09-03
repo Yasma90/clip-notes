@@ -25,8 +25,8 @@ Electron desktop notes app (Electron 32 + React 19 + electron-vite 3 + TS). Past
 - Notes write to the **user's real Documents folder**: `Documents/clip-notes/notes/YYYY-MM/<topic-slug>/YYYY-MM-DD_HHmmss.md` + `topics.json`. Dev runs touch real files.
 - Date filtering/grouping deliberately uses **local time, not the UTC ISO prefix** (see comments in `note-service.ts`). Don't "fix" this to UTC — README documents it as intended.
 - `updateNote` rewrites the frontmatter `date` to now; `saveNote` auto-registers the topic in `topics.json`.
-- UI strings are Spanish; code, comments, and this file are English — keep it that way.
-- README in Spanish — it's the source of truth for shortcuts/features; update it if you change them.
+- UI strings, code, comments, and this file are all in English.
+- README in English — it's the source of truth for shortcuts/features; update it if you change them.
 
 ## Git workflow (from README)
 

@@ -1,23 +1,17 @@
 const SIGNAL_WORDS = new Set([
-  'importante', 'clave', 'debe', 'necesita', 'critical', 'principal',
-  'conclusion', 'resultado', 'objetivo', 'meta', 'prioridad',
-  'important', 'key', 'must', 'should', 'note', 'critical',
-  'main', 'primary', 'result', 'therefore', 'conclusion',
-  'essential', 'required', 'significant', 'fundamental',
-  'destacar', 'resumen', 'esencial', 'requerido', 'significativo'
+  'important', 'key', 'must', 'should', 'critical', 'main', 'primary',
+  'conclusion', 'result', 'objective', 'goal', 'priority', 'note',
+  'therefore', 'essential', 'required', 'significant', 'fundamental',
+  'highlight', 'summary'
 ])
 
 const STOPWORDS = new Set([
-  'el', 'la', 'los', 'las', 'un', 'una', 'de', 'del', 'en', 'con', 'por',
-  'para', 'es', 'son', 'fue', 'ser', 'que', 'se', 'su', 'al', 'lo', 'como',
-  'más', 'pero', 'sus', 'le', 'ya', 'o', 'este', 'si', 'porque', 'esta',
-  'entre', 'cuando', 'muy', 'sin', 'sobre', 'también', 'me', 'hasta', 'hay',
-  'donde', 'quien', 'desde', 'todo', 'nos', 'durante', 'todos', 'uno', 'ni',
   'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for',
   'of', 'with', 'by', 'is', 'are', 'was', 'were', 'be', 'been', 'being',
   'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could',
   'should', 'may', 'might', 'shall', 'can', 'it', 'its', 'this', 'that',
-  'these', 'those', 'i', 'we', 'you', 'he', 'she', 'they', 'them', 'not'
+  'these', 'those', 'i', 'we', 'you', 'he', 'she', 'they', 'them', 'not',
+  'all', 'each', 'other', 'another', 'every', 'any', 'some', 'many', 'most'
 ])
 
 interface ScoredSentence {

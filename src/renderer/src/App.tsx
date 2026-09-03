@@ -201,12 +201,12 @@ export default function App() {
                 className="pointer-events-auto flex items-center gap-1 px-2 py-1 text-xs text-text-muted hover:text-accent bg-tag-bg rounded-md hover:bg-sidebar-hover transition-colors"
               >
                 <ArrowLeft size={12} />
-                Volver
+                Back
               </button>
               <button
                 onClick={() => setShowPreview((p) => !p)}
                 className="pointer-events-auto p-1.5 rounded-md bg-tag-bg text-text-muted hover:text-accent hover:bg-sidebar-hover transition-colors"
-                title={showPreview ? 'Ocultar preview (Ctrl+Shift+P)' : 'Mostrar preview (Ctrl+Shift+P)'}
+                title={showPreview ? 'Hide preview (Ctrl+Shift+P)' : 'Show preview (Ctrl+Shift+P)'}
               >
                 {showPreview ? <EyeOff size={14} /> : <Eye size={14} />}
               </button>
