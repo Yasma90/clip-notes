@@ -1,15 +1,17 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import type { Topic } from '../types'
 
 export function useTopics() {
   const [topics, setTopics] = useState<Topic[]>([])
+  const genRef = useRef(0)
 
   const refresh = useCallback(async () => {
+    const gen = ++genRef.current
     try {
       const result = await window.api.getTopics()
-      setTopics(result)
+      if (gen === genRef.current) setTopics(result)
     } catch (err) {
-      console.error('Failed to load topics:', err)
+      if (gen === genRef.current) console.error('Failed to load topics:', err)
     }
   }, [])
 

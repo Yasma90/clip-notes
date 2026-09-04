@@ -21,6 +21,7 @@ export interface NoteData {
 export interface NoteFilter {
   topic?: string
   yearMonth?: string
+  date?: string // YYYY-MM-DD for day-level filtering
   searchQuery?: string
 }
 
@@ -32,7 +33,11 @@ export interface Topic {
 
 export interface DateGroup {
   year: number
-  months: { month: number; count: number }[]
+  months: {
+    month: number
+    count: number
+    days: { day: number; count: number }[]
+  }[]
 }
 
 export interface ClipNotesAPI {

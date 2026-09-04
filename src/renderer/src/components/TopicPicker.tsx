@@ -28,7 +28,7 @@ export default function TopicPicker({ topics, value, onChange, onCreateTopic }: 
     t.name.toLowerCase().includes(search.toLowerCase())
   )
 
-  const selectedName = topics.find((t) => t.id === value)?.name || value || 'Seleccionar tema'
+  const selectedName = topics.find((t) => t.id === value)?.name || value || 'Select topic'
 
   const handleCreate = async () => {
     if (search.trim()) {
@@ -56,7 +56,7 @@ export default function TopicPicker({ topics, value, onChange, onCreateTopic }: 
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Buscar o crear tema..."
+              placeholder="Search or create topic..."
               className="w-full bg-surface px-2 py-1.5 text-xs rounded border border-border text-text placeholder:text-text-muted focus:outline-none focus:border-accent"
               autoFocus
             />
@@ -86,7 +86,7 @@ export default function TopicPicker({ topics, value, onChange, onCreateTopic }: 
               className="w-full flex items-center gap-1 px-3 py-2 text-xs text-accent hover:bg-sidebar-hover border-t border-border transition-colors"
             >
               <Plus size={12} />
-              Crear "{search.trim()}"
+              Create "{search.trim()}"
             </button>
           )}
         </div>

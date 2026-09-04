@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
   FolderOpen,
   Calendar,
@@ -12,10 +12,13 @@ import type { Topic, DateGroup } from '../types'
 
 interface Props {
   topics: Topic[]
+  dateGroups: DateGroup[]
   selectedTopic: string | null
   selectedYearMonth: string | null
+  selectedDate: string | null
   onSelectTopic: (topic: string | null) => void
   onSelectYearMonth: (ym: string | null) => void
+  onSelectDate: (date: string | null) => void
   onCreateTopic: (name: string) => void
   onNewNote: () => void
   searchQuery: string
@@ -23,34 +26,41 @@ interface Props {
 }
 
 const MONTH_NAMES = [
-  '', 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
-  'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'
+  '', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
 ]
 
 export default function Sidebar({
   topics,
+  dateGroups,
   selectedTopic,
   selectedYearMonth,
+  selectedDate,
   onSelectTopic,
   onSelectYearMonth,
+  onSelectDate,
   onCreateTopic,
   onNewNote,
   searchQuery,
   onSearchChange
 }: Props) {
-  const [dateGroups, setDateGroups] = useState<DateGroup[]>([])
   const [expandedYears, setExpandedYears] = useState<Set<number>>(new Set())
+  const [expandedMonths, setExpandedMonths] = useState<Set<string>>(new Set())
   const [showNewTopic, setShowNewTopic] = useState(false)
   const [newTopicName, setNewTopicName] = useState('')
-
-  useEffect(() => {
-    window.api.getDateGroups().then(setDateGroups)
-  }, [topics])
 
   const toggleYear = (year: number) => {
     setExpandedYears((prev) => {
       const next = new Set(prev)
       next.has(year) ? next.delete(year) : next.add(year)
+      return next
+    })
+  }
+
+  const toggleMonth = (ym: string) => {
+    setExpandedMonths((prev) => {
+      const next = new Set(prev)
+      next.has(ym) ? next.delete(ym) : next.add(ym)
       return next
     })
   }
@@ -72,7 +82,7 @@ export default function Sidebar({
           <button
             onClick={onNewNote}
             className="p-1.5 rounded-md bg-accent/20 text-accent hover:bg-accent/30 transition-colors"
-            title="Nueva nota (Ctrl+N)"
+            title="New note (Ctrl+N)"
           >
             <Plus size={14} />
           </button>
@@ -81,7 +91,7 @@ export default function Sidebar({
           <Search size={14} className="absolute left-2.5 top-2.5 text-text-muted" />
           <input
             type="text"
-            placeholder="Buscar notas..."
+            placeholder="Search notes..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             className="w-full bg-surface pl-8 pr-3 py-2 text-xs rounded-md border border-border text-text placeholder:text-text-muted focus:outline-none focus:border-accent"
@@ -94,7 +104,7 @@ export default function Sidebar({
         <div className="p-3">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-semibold text-text-muted uppercase tracking-wider">
-              Temas
+              Topics
             </span>
             <button
               onClick={() => setShowNewTopic(!showNewTopic)}
@@ -111,7 +121,7 @@ export default function Sidebar({
                 value={newTopicName}
                 onChange={(e) => setNewTopicName(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleCreateTopic()}
-                placeholder="Nombre del tema"
+                placeholder="Topic name"
                 className="flex-1 bg-surface px-2 py-1 text-xs rounded border border-border text-text focus:outline-none focus:border-accent"
                 autoFocus
               />
@@ -127,7 +137,7 @@ export default function Sidebar({
             }`}
           >
             <FileText size={13} />
-            <span>Todas</span>
+            <span>All</span>
           </button>
 
           {topics.map((topic) => (
@@ -154,7 +164,7 @@ export default function Sidebar({
         {/* Dates */}
         <div className="p-3 border-t border-border">
           <span className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-2 block">
-            Fechas
+            Dates
           </span>
 
           {dateGroups.map((group) => (
@@ -175,28 +185,73 @@ export default function Sidebar({
               {expandedYears.has(group.year) &&
                 group.months.map((m) => {
                   const ym = `${group.year}-${String(m.month).padStart(2, '0')}`
+                  const hasDays = m.days && m.days.length > 0
                   return (
-                    <button
-                      key={ym}
-                      onClick={() =>
-                        onSelectYearMonth(selectedYearMonth === ym ? null : ym)
-                      }
-                      className={`w-full flex items-center justify-between pl-7 pr-2 py-1 text-xs rounded-md transition-colors ${
-                        selectedYearMonth === ym
-                          ? 'bg-accent/20 text-accent'
-                          : 'text-text-muted hover:bg-sidebar-hover hover:text-text'
-                      }`}
-                    >
-                      <span>{MONTH_NAMES[m.month]}</span>
-                      <span className="text-[10px]">{m.count}</span>
-                    </button>
+                    <div key={ym}>
+                      <div
+                        className={`flex items-center rounded-md transition-colors ${
+                          selectedYearMonth === ym
+                            ? 'bg-accent/20 text-accent'
+                            : 'hover:bg-sidebar-hover'
+                        }`}
+                      >
+                        <button
+                          onClick={() => hasDays && toggleMonth(ym)}
+                          className="pl-5 pr-1 py-1 text-text-muted hover:text-text"
+                        >
+                          {hasDays ? (
+                            expandedMonths.has(ym) ? (
+                              <ChevronDown size={10} />
+                            ) : (
+                              <ChevronRight size={10} />
+                            )
+                          ) : (
+                            <span className="inline-block w-[10px]" />
+                          )}
+                        </button>
+                        <button
+                          onClick={() =>
+                            onSelectYearMonth(selectedYearMonth === ym ? null : ym)
+                          }
+                          className={`flex-1 flex items-center justify-between pr-2 py-1 text-xs transition-colors ${
+                            selectedYearMonth === ym
+                              ? 'text-accent'
+                              : 'text-text-muted hover:text-text'
+                          }`}
+                        >
+                          <span>{MONTH_NAMES[m.month]}</span>
+                          <span className="text-[10px]">{m.count}</span>
+                        </button>
+                      </div>
+
+                      {expandedMonths.has(ym) &&
+                        m.days.map((d) => {
+                          const dateStr = `${ym}-${String(d.day).padStart(2, '0')}`
+                          return (
+                            <button
+                              key={dateStr}
+                              onClick={() =>
+                                onSelectDate(selectedDate === dateStr ? null : dateStr)
+                              }
+                              className={`w-full flex items-center justify-between pl-11 pr-2 py-1 text-xs rounded-md transition-colors ${
+                                selectedDate === dateStr
+                                  ? 'bg-accent/20 text-accent'
+                                  : 'text-text-muted hover:bg-sidebar-hover hover:text-text'
+                              }`}
+                            >
+                              <span>Day {d.day}</span>
+                              <span className="text-[10px]">{d.count}</span>
+                            </button>
+                          )
+                        })}
+                    </div>
                   )
                 })}
             </div>
           ))}
 
           {dateGroups.length === 0 && (
-            <p className="text-[11px] text-text-muted px-2">Sin notas aún</p>
+            <p className="text-[11px] text-text-muted px-2">No notes yet</p>
           )}
         </div>
       </div>

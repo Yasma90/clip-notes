@@ -79,16 +79,20 @@ export default function NoteEditor({ topics, editingNote, onSave, onCreateTopic,
 
   const handleSynthesize = () => {
     if (!body.trim()) return
-    const bullets = synthesize(body)
-    const separator = '\n\n---\n\n## Puntos Clave\n\n'
-    const newBody = body + separator + bullets
+    const separator = '\n\n---\n\n## Key Points\n\n'
+    // If a previous synthesis section exists, strip it so we synthesize from
+    // the original content only and replace (not concatenate) the bullets.
+    const existingIdx = body.indexOf(separator.trim())
+    const baseContent = existingIdx >= 0 ? body.slice(0, existingIdx).trimEnd() : body
+    const bullets = synthesize(baseContent)
+    const newBody = baseContent + separator + bullets
     setBody(newBody)
     onBodyChange?.(newBody)
   }
 
   const handleSave = () => {
     onSave({
-      title: title || 'Sin título',
+      title: title || 'Untitled',
       body,
       topic: topic || 'general',
       tags
@@ -135,7 +139,7 @@ export default function NoteEditor({ topics, editingNote, onSave, onCreateTopic,
       <div className="p-4 pb-2">
         <input
           type="text"
-          placeholder="Título de la nota..."
+          placeholder="Note title..."
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           className="w-full bg-transparent text-lg font-semibold text-text-bright placeholder:text-text-muted focus:outline-none"
@@ -192,7 +196,7 @@ export default function NoteEditor({ topics, editingNote, onSave, onCreateTopic,
           value={body}
           onChange={(e) => { setBody(e.target.value); onBodyChange?.(e.target.value) }}
           onPaste={handlePaste}
-          placeholder="Pega o escribe tu contenido aquí...&#10;&#10;Puedes pegar texto de cualquier sitio web, documento o email y se convertirá automáticamente a Markdown."
+          placeholder="Paste or write your content here...&#10;&#10;You can paste text from any website, document, or email and it will be automatically converted to Markdown."
           className="w-full h-full bg-transparent text-sm text-text leading-relaxed resize-none focus:outline-none font-mono placeholder:text-text-muted/50"
           spellCheck={false}
         />

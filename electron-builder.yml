@@ -10,8 +10,11 @@ files:
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
 win:
   executableName: clip-notes
+  signingHashAlgorithms: []
+  sign: null
   target:
     - nsis
+    - dir
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}

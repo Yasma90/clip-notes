@@ -7,8 +7,12 @@ const api = {
   updateNote: (filePath: string, note: { title: string; body: string; topic: string; tags: string[] }) =>
     ipcRenderer.invoke('note:update', filePath, note),
 
-  listNotes: (filter?: { topic?: string; yearMonth?: string; searchQuery?: string }) =>
-    ipcRenderer.invoke('note:list', filter),
+  listNotes: (filter?: {
+    topic?: string
+    yearMonth?: string
+    date?: string
+    searchQuery?: string
+  }) => ipcRenderer.invoke('note:list', filter),
 
   readNote: (filePath: string) => ipcRenderer.invoke('note:read', filePath),
 

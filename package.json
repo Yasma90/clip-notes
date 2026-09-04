@@ -1,7 +1,9 @@
 {
   "name": "clip-notes",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Desktop app for capturing, formatting and organizing notes in markdown",
+  "author": "yasma90",
+  "license": "MIT",
   "main": "./out/main/index.js",
   "scripts": {
     "dev": "electron-vite dev",
@@ -27,7 +29,7 @@
     "@types/react-dom": "^19.0.0",
     "@types/turndown": "^5.0.5",
     "@vitejs/plugin-react": "^4.3.4",
-    "electron": "^33.2.1",
+    "electron": "^32.2.7",
     "electron-builder": "^25.1.8",
     "electron-vite": "^3.0.0",
     "tailwindcss": "^4.1.4",
